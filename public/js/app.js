@@ -17481,7 +17481,15 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
     "fill-opacity": "1"
   },
   d: "M 9.632812 5.9375 L 9.632812 1.410156 L 0 10.265625 L 9.632812 19.125 L 9.632812 15.054688 C 18.984375 15.296875 23.738281 22.488281 23.785156 22.5625 L 24.449219 23.589844 L 24.6875 22.390625 C 24.894531 21.34375 25 20.265625 25 19.1875 C 25 11.027344 19.265625 6.101562 9.632812 5.9375 Z M 23.894531 21.074219 C 22.140625 18.960938 17.203125 14.054688 9.140625 14.054688 L 8.644531 14.054688 L 8.644531 16.871094 L 1.460938 10.265625 L 8.644531 3.664062 L 8.644531 6.925781 L 9.140625 6.925781 C 18.589844 6.925781 24.007812 11.394531 24.007812 19.1875 C 24.007812 19.820312 23.96875 20.449219 23.894531 21.074219 Z M 23.894531 21.074219 "
-})])])])]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+})])])])]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+  href: "/img/test.png",
+  "data-lightbox": "test-png",
+  "data-title": "Image",
+  "class": "comments__img"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+  src: "/img/test.png",
+  alt: "img"
+})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "comments__text"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, " Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae officia velit soluta cum, dicta facilis commodi, aspernatur. "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Lorem ipsum dolor sit, amet consectetur adipisicing elit."), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, " Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae officia velit soluta cum, dicta facilis commodi, aspernatur minima odit dolores provident quibusdam doloribus doloremque exercitationem tenetur repellat perspiciatis quisquam id! ")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "sub-comment"
@@ -19688,7 +19696,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".comments {\n  display: flex;\n  flex-direction: column;\n  max-width: 600px;\n  gap: 40px;\n  margin: 20px auto;\n}\n.comments .sub-comment {\n  margin-left: 30px;\n}\n.comments__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 10px;\n  background-color: #f3f5f7;\n  padding: 5px 10px;\n  margin-bottom: 10px;\n}\n.comments__header .header-left {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  margin-left: 10px;\n}\n.comments__header .header-right {\n  margin-right: 10px;\n}\n.comments__header .header-right path {\n  transition: .3s;\n  fill: #65b4ff;\n}\n.comments__avatar {\n  width: 100%;\n  height: 100%;\n  border-radius: 50%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.comments .background-img {\n  width: 50px;\n  height: 50px;\n  padding: 5px;\n  border-radius: 50%;\n  background-color: white;\n  box-sizing: border-box;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.comments__text span {\n  display: block;\n  padding-left: 5px;\n  margin: 20px 0;\n  border-left: 2px solid #65b4ff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".comments {\n  display: flex;\n  flex-direction: column;\n  max-width: 600px;\n  gap: 40px;\n  margin: 20px auto;\n}\n.comments__img {\n  display: block;\n  margin: auto auto 20px auto;\n  width: 320px;\n  height: 240px;\n  border-radius: 5px;\n  box-shadow: 5px 5px 10px -3px rgba(0, 0, 0, 0.75);\n  overflow: hidden;\n  transition: .3s;\n}\n.comments__img:hover {\n  transform: scale(1.05);\n  transition: .3s;\n}\n.comments__img img {\n  width: 100%;\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.comments .sub-comment {\n  margin-left: 30px;\n}\n.comments__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 10px;\n  background-color: #f3f5f7;\n  padding: 5px 10px;\n  margin-bottom: 10px;\n}\n.comments__header .header-left {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  margin-left: 10px;\n}\n.comments__header .header-right {\n  margin-right: 10px;\n}\n.comments__header .header-right path {\n  transition: .3s;\n  fill: #65b4ff;\n}\n.comments__avatar {\n  width: 100%;\n  height: 100%;\n  border-radius: 50%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.comments .background-img {\n  width: 50px;\n  height: 50px;\n  padding: 5px;\n  border-radius: 50%;\n  background-color: white;\n  box-sizing: border-box;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.comments__text span {\n  display: block;\n  padding-left: 5px;\n  margin: 20px 0;\n  border-left: 2px solid #65b4ff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

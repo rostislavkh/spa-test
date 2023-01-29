@@ -19,6 +19,9 @@
                     </svg>
                 </a>
             </div>
+            <a href="/img/test.png" data-lightbox="test-png" data-title="Image" class="comments__img">
+                <img src="/img/test.png" alt="img">
+            </a>
             <div class="comments__text">
                 <p>
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae officia velit soluta cum, dicta
@@ -161,6 +164,28 @@ export default {
     max-width: 600px;
     gap: 40px;
     margin: 20px auto;
+
+    &__img {
+        display: block;
+        margin: auto auto 20px auto;
+        width: 320px;
+        height: 240px;
+        border-radius: 5px;
+        box-shadow: 5px 5px 10px -3px rgba(0, 0, 0, 0.75);
+        overflow: hidden;
+        transition: .3s;
+
+        &:hover {
+            transform: scale(1.05);
+            transition: .3s;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
 
     .sub-comment {
         margin-left: 30px;
