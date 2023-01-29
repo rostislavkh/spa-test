@@ -1,4 +1,17 @@
 <template>
+    <div class="d-grid gap-2 col-6 mx-auto mb-2 mt-4">
+        <button class="btn btn-primary" type="button">Added new comment</button>
+    </div>
+    <hr />
+    <h3 class="text-center d-block mb-3">Sort type</h3>
+    <div class="filter-comments">
+        <button type="button" class="btn btn-info">LIFO</button>
+        <button type="button" class="btn btn-outline-info">Info</button>
+        <button type="button" class="btn btn-outline-info">Info</button>
+        <button type="button" class="btn btn-outline-info">Info</button>
+        <button type="button" class="btn btn-outline-info">Info</button>
+    </div>
+    <hr />
     <div class="comments">
         <div class="comments__item">
             <div class="comments__header">
@@ -158,6 +171,12 @@ export default {
 </script>
 
 <style lang="scss">
+.filter-comments {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
 .comments {
     display: flex;
     flex-direction: column;
