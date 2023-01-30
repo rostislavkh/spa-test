@@ -1,6 +1,6 @@
 <template>
     <div class="d-grid gap-2 col-6 mx-auto mb-2 mt-4">
-        <button class="btn btn-primary" type="button">Added new comment</button>
+        <button class="btn btn-primary" type="button" data-bs-target="#createModal" data-bs-toggle="modal">Added new comment</button>
     </div>
     <hr />
     <h3 class="text-center d-block mb-3">Sort type</h3>
@@ -159,6 +159,102 @@
                     repellat perspiciatis
                     quisquam id!
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createModal" aria-hidden="true" aria-labelledby="createModalLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createModalLabel">Create comment</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена -->
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name: <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" placeholder="Your name..." required>
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email: <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="example@gmail.com" required>
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="url" class="form-label">Home page:</label>
+                            <input type="url" class="form-control" id="url" placeholder="https://example.com">
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">File (img or txt):</label>
+                            <input type="file" class="form-control" id="file" accept=".png, .jpg, .gif, .txt" aria-label="file example">
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Comment: <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="comment" placeholder="Comment..."
+                                required></textarea>
+                            <div class="invalid-feedback">
+                                No valid
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="replyModal" aria-hidden="true" aria-labelledby="replyModalLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="replyModalLabel">Reply</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена -->
+                    <form>
+                        <div class="mb-3">
+                            <label for="name-reply" class="form-label">Name: <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name-reply" placeholder="Your name..." required>
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email-reply" class="form-label">Email: <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email-reply" placeholder="example@gmail.com" required>
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="url" class="form-label">Home page:</label>
+                            <input type="url" class="form-control" id="url" placeholder="https://example.com">
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="file-reply" class="form-label">File (img or txt):</label>
+                            <input type="file" class="form-control" id="file-reply" accept=".png, .jpg, .gif, .txt"
+                                aria-label="file example">
+                            <div class="invalid-feedback">No valid</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment-reply" class="form-label">Reply text: <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="comment-reply" placeholder="Reply text..." required></textarea>
+                            <div class="invalid-feedback">
+                                No valid
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button">Reply</button>
+                </div>
             </div>
         </div>
     </div>
