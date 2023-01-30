@@ -12,7 +12,7 @@
     </div>
     <hr />
     <div class="comments">
-        <div class="comments__item">
+        <div class="comments__item ql-snow">
             <div class="comments__header">
                 <div class="header-left">
                     <div class="background-img">
@@ -34,12 +34,13 @@
             <a href="/img/test.png" data-lightbox="test-png" data-title="Image" class="comments__img">
                 <img src="/img/test.png" alt="img">
             </a>
-            <div class="comments__text">
+            <div class="comments__text ql-editor">
                 <p>
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae officia velit soluta cum, dicta
                     facilis commodi,
                     aspernatur.
                 </p>
+                <pre class="ql-syntax" spellcheck="false"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'test'</span>);</pre>
                 <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
                 <p>
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae officia velit soluta cum, dicta
@@ -194,12 +195,8 @@
                             <div class="invalid-feedback">No valid</div>
                         </div>
                         <div class="mb-3">
-                            <label for="comment" class="form-label">Comment: <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="comment" placeholder="Comment..."
-                                required></textarea>
-                            <div class="invalid-feedback">
-                                No valid
-                            </div>
+                            <label class="form-label">Comment: <span class="text-danger">*</span></label>
+                            <QuillEditor :options="options" />
                         </div>
                         <div class="mb-3">
                             <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
@@ -249,11 +246,8 @@
                             <div class="invalid-feedback">No valid</div>
                         </div>
                         <div class="mb-3">
-                            <label for="comment-reply" class="form-label">Reply text: <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="comment-reply" placeholder="Reply text..." required></textarea>
-                            <div class="invalid-feedback">
-                                No valid
-                            </div>
+                            <label class="form-label">Comment: <span class="text-danger">*</span></label>
+                            <QuillEditor :options="options" />
                         </div>
                         <div class="mb-3">
                             <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
@@ -273,9 +267,33 @@
 
 <script>
 import { VueRecaptcha } from 'vue-recaptcha';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
-    components: { VueRecaptcha }
+    components: { VueRecaptcha, QuillEditor },
+    data() {
+        return {
+            options: {
+                debug: 'info',
+                modules: {
+                    syntax: true,
+                    toolbar: [
+                        ['bold', 'italic'],
+                        ['code-block'],
+                        ['link'],
+                        ['clean']
+                    ]
+                },
+                theme: 'snow'
+            }
+        }
+    },
+    mounted() {
+        hljs.configure({   // optionally configure hljs
+            languages: ['javascript', 'ruby', 'python']
+        });
+    }
 }
 </script>
 
@@ -364,13 +382,13 @@ export default {
         align-items: center;
     }
 
-    &__text {
-        span {
-            display: block;
-            padding-left: 5px;
-            margin: 20px 0;
-            border-left: 2px solid rgb(101, 180, 255);
-        }
-    }
+    // &__text {
+    //     span {
+    //         display: block;
+    //         padding-left: 5px;
+    //         margin: 20px 0;
+    //         border-left: 2px solid rgb(101, 180, 255);
+    //     }
+    // }
 }
 </style>

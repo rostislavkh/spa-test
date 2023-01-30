@@ -23,6 +23,7 @@
     "test": "tests"
   },
   "dependencies": {
+    "@vueup/vue-quill": "^1.0.1",
     "asynckit": "^0.4.0",
     "combined-stream": "^1.0.8",
     "delayed-stream": "^1.0.0",
