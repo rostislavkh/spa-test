@@ -44,7 +44,8 @@
     "source-map-js": "^1.0.2",
     "supports-preserve-symlinks-flag": "^1.0.0",
     "vite-plugin-full-reload": "^1.0.5",
-    "vue": "^3.2.36"
+    "vue": "^3.2.36",
+    "vue-recaptcha": "^2.0.3"
   },
   "repository": {
     "type": "git",

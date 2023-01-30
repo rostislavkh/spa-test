@@ -202,6 +202,12 @@
                                 No valid
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
+                            <div class="text-danger">
+                                No valid
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -250,6 +256,12 @@
                                 No valid
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
+                            <div class="text-danger">
+                                No valid
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -261,8 +273,10 @@
 </template>
 
 <script>
-export default {
+import { VueRecaptcha } from 'vue-recaptcha';
 
+export default {
+    components: { VueRecaptcha }
 }
 </script>
 
