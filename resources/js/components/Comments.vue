@@ -169,45 +169,56 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="createModalLabel">Create comment</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close-modal-create-comment" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена -->
-                    <form>
+                    <form class="form-create-comment">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" placeholder="Your name..." required>
-                            <div class="invalid-feedback">No valid</div>
+                            <input type="text" class="form-control" id="name" placeholder="Your name..." v-model="create_comment_form.name.content" required>
+                            <div class="text-danger" v-if="create_comment_form.name.is_invalid">
+                                {{ create_comment_form.name.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email: <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email" placeholder="example@gmail.com" required>
-                            <div class="invalid-feedback">No valid</div>
+                            <input type="email" class="form-control" id="email" placeholder="example@gmail.com" v-model="create_comment_form.email.content" required>
+                            <div class="text-danger" v-if="create_comment_form.email.is_invalid">
+                                {{ create_comment_form.email.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="url" class="form-label">Home page:</label>
-                            <input type="url" class="form-control" id="url" placeholder="https://example.com">
-                            <div class="invalid-feedback">No valid</div>
+                            <input type="url" class="form-control" id="url" placeholder="https://example.com" v-model="create_comment_form.url.content">
+                            <div class="text-danger" v-if="create_comment_form.url.is_invalid">
+                                {{ create_comment_form.url.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="file" class="form-label">File (img or txt):</label>
-                            <input type="file" class="form-control" id="file" accept=".png, .jpg, .gif, .txt" aria-label="file example">
-                            <div class="invalid-feedback">No valid</div>
+                            <input type="file" class="form-control input-file-comment" id="file" accept=".png, .jpg, .gif, .txt" aria-label="file example">
+                            <div class="text-danger" v-if="create_comment_form.file.is_invalid">
+                                {{ create_comment_form.file.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Comment: <span class="text-danger">*</span></label>
-                            <QuillEditor :options="options" />
+                            <QuillEditor ref="createCommentText" :options="options" />
+                            <div class="text-danger" v-if="create_comment_form.comment.is_invalid">
+                                {{ create_comment_form.comment.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
-                            <div class="text-danger">
-                                No valid
+                            <vue-recaptcha ref="recaptcha1" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
+                            <div class="text-danger" v-if="!is_valid_captha">
+                                No valid captha
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="button">Create</button>
+                    <button class="btn btn-primary" type="button" @click="create">Create</button>
                 </div>
             </div>
         </div>
@@ -227,33 +238,44 @@
                         <div class="mb-3">
                             <label for="name-reply" class="form-label">Name: <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name-reply" placeholder="Your name..." required>
-                            <div class="invalid-feedback">No valid</div>
+                            <!-- <div class="text-danger" v-if="create_comment_form.name.is_invalid">
+                                {{ create_comment_form.name.invalid_text }}
+                            </div> -->
                         </div>
                         <div class="mb-3">
                             <label for="email-reply" class="form-label">Email: <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email-reply" placeholder="example@gmail.com" required>
-                            <div class="invalid-feedback">No valid</div>
+                            <!-- <div class="text-danger" v-if="create_comment_form.email.is_invalid">
+                                {{ create_comment_form.email.invalid_text }}
+                            </div> -->
                         </div>
                         <div class="mb-3">
                             <label for="url" class="form-label">Home page:</label>
                             <input type="url" class="form-control" id="url" placeholder="https://example.com">
-                            <div class="invalid-feedback">No valid</div>
+                            <!-- <div class="text-danger" v-if="create_comment_form.url.is_invalid">
+                                {{ create_comment_form.url.invalid_text }}
+                            </div> -->
                         </div>
                         <div class="mb-3">
                             <label for="file-reply" class="form-label">File (img or txt):</label>
                             <input type="file" class="form-control" id="file-reply" accept=".png, .jpg, .gif, .txt"
                                 aria-label="file example">
-                            <div class="invalid-feedback">No valid</div>
+                            <!-- <div class="text-danger" v-if="create_comment_form.file.is_invalid">
+                                {{ create_comment_form.file.invalid_text }}
+                            </div> -->
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Comment: <span class="text-danger">*</span></label>
                             <QuillEditor :options="options" />
+                            <!-- <div class="text-danger" v-if="create_comment_form.comment.is_invalid">
+                                {{ create_comment_form.comment.invalid_text }}
+                            </div> -->
                         </div>
                         <div class="mb-3">
                             <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
-                            <div class="text-danger">
-                                No valid
-                            </div>
+                            <!-- <div class="text-danger" v-if="!is_valid_captha">
+                                No valid captha
+                            </div> -->
                         </div>
                     </form>
                 </div>
@@ -286,7 +308,91 @@ export default {
                     ]
                 },
                 theme: 'snow'
+            },
+
+
+            create_comment_form: {
+                name: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                email: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                url: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                file: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                comment: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+            },
+
+            is_valid_captha: true
+        }
+    },
+    methods: {
+        cleanErrors() {
+            this.is_valid_captha = true;
+            
+            for (let key in this.create_comment_form) {
+                this.create_comment_form[key].is_invalid = false;
+                this.create_comment_form[key].invalid_text = null;
             }
+        },
+        cleanCreateForm() {
+            for (let key in this.create_comment_form) {
+                this.create_comment_form[key].content = '';
+            }
+        },
+        async create() {
+            this.cleanErrors();
+
+            let errors = null;
+
+            const data = new FormData(document.querySelector('.form-create-comment'));
+            let file = document.querySelector('.input-file-comment');
+
+            if (file.files[0]) {
+                data.append('file', file.files[0]);
+            }
+            data.append('name', this.create_comment_form.name.content);
+            data.append('email', this.create_comment_form.email.content);
+            data.append('url', this.create_comment_form.url.content);
+            if (this.$refs.createCommentText.getText() != '\n') {
+                data.append('comment', this.$refs.createCommentText.getHTML());
+            }
+
+            await axios.post('api/make-comment', data).catch(error => (errors = error.response.data.errors));
+
+            if (errors) {
+                for (let key in errors) {
+                    if (key == 'g-recaptcha-response') {
+                        this.is_valid_captha = false;
+                    } else {
+                        this.create_comment_form[key].is_invalid = true;
+                        this.create_comment_form[key].invalid_text = errors[key][0];
+                    }
+                }
+            } else {
+                this.cleanErrors();
+                this.cleanCreateForm();
+            }
+
+            this.$refs.recaptcha1.reset();
+
+            document.querySelector('.close-modal-create-comment').click();
         }
     },
     mounted() {
@@ -382,13 +488,13 @@ export default {
         align-items: center;
     }
 
-    // &__text {
-    //     span {
-    //         display: block;
-    //         padding-left: 5px;
-    //         margin: 20px 0;
-    //         border-left: 2px solid rgb(101, 180, 255);
-    //     }
-    // }
+    &__text {
+        i {
+            display: block;
+            padding-left: 5px;
+            margin: 20px 0;
+            border-left: 2px solid rgb(101, 180, 255);
+        }
+    }
 }
 </style>
