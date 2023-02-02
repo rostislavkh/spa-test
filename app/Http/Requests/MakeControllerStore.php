@@ -17,7 +17,7 @@ class MakeControllerStore extends FormRequest
     {
         return [
             'g-recaptcha-response' => 'required',
-            'parrent_id' => 'nullable|numeric|exists:comments,id',
+            'parrent_id' => $this->parrent_id != 'null' ? 'numeric|exists:comments,id' : 'nullable',
             'name' => 'required|min:3|max:150',
             'email' => 'required|email',
             'url' => 'url|nullable',
