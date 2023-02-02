@@ -17,9 +17,11 @@ const app = createApp({});
 
 import Comments from './components/Comments.vue';
 import CommentDatails from './components/Comment-datails.vue';
+import Pagination from './components/Pagination.vue';
 
 app.component('comments', Comments);
 app.component('comment-datails', CommentDatails);
+app.component('pagination', Pagination);
 
 /**
  * The following block of code may be used to automatically register your

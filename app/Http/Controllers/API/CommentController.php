@@ -59,6 +59,16 @@ class CommentController extends Controller
                 break;
         }
 
+        $paginates = [
+            'is_view_paginate' => $comments->hasPages(),
+            'curr_page' => $comments->currentPage(),
+            'items' => $comments->links()->elements[0],
+            'items_count' => count($comments->links()->elements[0]),
+            'total' => $comments->total(),
+            'is_first' => $comments->onFirstPage(),
+            'is_last' => $comments->hasMorePages(),
+        ];
+
         $tmp_arr = [];
 
         function pushArr($comments, &$tmp_arr)
@@ -89,6 +99,9 @@ class CommentController extends Controller
 
         pushArr($comments, $tmp_arr);
 
-        return response()->json($tmp_arr);
+        return response()->json([
+            'comments' => $tmp_arr,
+            'paginates' => $paginates
+        ]);
     }
 }

@@ -13,6 +13,8 @@
     <div class="comments">
         <comment-datails :items="comments"></comment-datails>
     </div>
+    <pagination :paginates="paginates" @selectPage="selectPage">
+    </pagination>
 
     <!-- Модалка створення коментаря -->
     <div class="modal fade" id="createModal" aria-hidden="true" aria-labelledby="createModalLabel"
@@ -201,10 +203,23 @@ export default {
                 },
             },
 
+            paginates: {
+                is_view_paginate: false,
+                curr_page: 0,
+                items: [],
+                total: 0,
+                is_first: false,
+                is_last: false,
+            },
+
             is_valid_captha: true
         }
     },
     methods: {
+        selectPage(e) {
+            this.paginates.curr_page = e;
+            this.getComments();
+        },
         setSort(field) {
             if (field + '_asc' == this.sort_type.code) {
                 this.sort_type.code = field + '_desc';
@@ -221,9 +236,13 @@ export default {
         },
         async getComments() {
             let data = [];
-            await axios.get('api/get-comments/' + this.sort_type.code).then(response => (data = response.data));
+            await axios.get('api/get-comments/' + this.sort_type.code + '?page=' + this.paginates.curr_page).then(response => (data = response.data));
 
-            this.comments = data;
+            this.comments = data.comments ? data.comments : {};
+
+            if (data.paginates) {
+                this.paginates = data.paginates;
+            }
         },
         cleanErrors() {
             this.is_valid_captha = true;
