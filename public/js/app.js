@@ -18014,6 +18014,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         type_emoji: '👇',
         type_text: '(Z-A)'
       },
+      reply_id: 0,
       comments: {},
       options: {
         debug: 'info',
@@ -18050,6 +18051,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           invalid_text: null
         }
       },
+      reply_comment_form: {
+        name: {
+          content: '',
+          is_invalid: false,
+          invalid_text: null
+        },
+        email: {
+          content: '',
+          is_invalid: false,
+          invalid_text: null
+        },
+        url: {
+          content: '',
+          is_invalid: false,
+          invalid_text: null
+        },
+        file: {
+          content: '',
+          is_invalid: false,
+          invalid_text: null
+        },
+        comment: {
+          content: '',
+          is_invalid: false,
+          invalid_text: null
+        }
+      },
       paginates: {
         is_view_paginate: false,
         curr_page: 0,
@@ -18058,10 +18086,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         is_first: false,
         is_last: false
       },
-      is_valid_captha: true
+      is_valid_captha: true,
+      is_valid_captha_2: true
     };
   },
   methods: {
+    setReply: function setReply(e) {
+      this.reply_id = e;
+      console.log(e);
+    },
     selectPage: function selectPage(e) {
       this.paginates.curr_page = e;
       this.getComments();
@@ -18109,10 +18142,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.create_comment_form[key].is_invalid = false;
         this.create_comment_form[key].invalid_text = null;
       }
+      this.is_valid_captha_2 = true;
+      for (var _key in this.reply_comment_form) {
+        this.reply_comment_form[_key].is_invalid = false;
+        this.reply_comment_form[_key].invalid_text = null;
+      }
     },
     cleanCreateForm: function cleanCreateForm() {
       for (var key in this.create_comment_form) {
         this.create_comment_form[key].content = '';
+      }
+    },
+    cleanReplyForm: function cleanReplyForm() {
+      for (var key in this.reply_comment_form) {
+        this.reply_comment_form[key].content = '';
       }
     },
     create: function create() {
@@ -18129,17 +18172,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               if (file.files[0]) {
                 data.append('file', file.files[0]);
               }
+              data.append('parrent_id', null);
               data.append('name', _this2.create_comment_form.name.content);
               data.append('email', _this2.create_comment_form.email.content);
               data.append('url', _this2.create_comment_form.url.content);
               if (_this2.$refs.createCommentText.getText() != '\n') {
                 data.append('comment', _this2.$refs.createCommentText.getHTML());
               }
-              _context2.next = 11;
+              _context2.next = 12;
               return axios.post('api/make-comment', data)["catch"](function (error) {
                 return errors = error.response.data.errors;
               });
-            case 11:
+            case 12:
               if (errors) {
                 for (key in errors) {
                   if (key == 'g-recaptcha-response') {
@@ -18152,14 +18196,68 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               } else {
                 _this2.cleanErrors();
                 _this2.cleanCreateForm();
+                _this2.$refs.createCommentText.setText('');
               }
               _this2.$refs.recaptcha1.reset();
               document.querySelector('.close-modal-create-comment').click();
-            case 14:
+              _this2.getComments();
+            case 16:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
+      }))();
+    },
+    createReply: function createReply() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var errors, data, file, key;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _this3.cleanErrors();
+              errors = null;
+              data = new FormData(document.querySelector('.form-reply-comment'));
+              file = document.querySelector('.input-file-comment-reply');
+              if (file.files[0]) {
+                data.append('file', file.files[0]);
+              }
+              data.append('parrent_id', _this3.reply_id);
+              data.append('name', _this3.reply_comment_form.name.content);
+              data.append('email', _this3.reply_comment_form.email.content);
+              data.append('url', _this3.reply_comment_form.url.content);
+              if (_this3.$refs.replyCommentText.getText() != '\n') {
+                data.append('comment', _this3.$refs.replyCommentText.getHTML());
+              }
+              _context3.next = 12;
+              return axios.post('api/make-comment', data)["catch"](function (error) {
+                return errors = error.response.data.errors;
+              });
+            case 12:
+              if (errors) {
+                for (key in errors) {
+                  if (key == 'g-recaptcha-response') {
+                    _this3.is_valid_captha = false;
+                  } else {
+                    if (_this3.reply_comment_form[key]) {
+                      _this3.reply_comment_form[key].is_invalid = true;
+                      _this3.reply_comment_form[key].invalid_text = errors[key][0];
+                    }
+                  }
+                }
+              } else {
+                _this3.cleanErrors();
+                _this3.cleanReplyForm();
+                _this3.$refs.replyCommentText.setText('');
+              }
+              _this3.$refs.recaptcha2.reset();
+              document.querySelector('.close-modal-reply-comment').click();
+              _this3.getComments();
+            case 16:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     }
   },
@@ -18233,7 +18331,7 @@ var _hoisted_4 = {
 var _hoisted_5 = {
   "class": "comments__date"
 };
-var _hoisted_6 = ["href"];
+var _hoisted_6 = ["onClick"];
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   "xmlns:xlink": "http://www.w3.org/1999/xlink",
@@ -18272,9 +18370,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": "comments__item ql-snow",
       key: key
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.date) + " в " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.time), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      href: 'reply/' + item.id,
-      "class": "header-right"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.date) + " в " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.time), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      "class": "header-right",
+      type: "button",
+      "data-bs-target": "#replyModal",
+      "data-bs-toggle": "modal",
+      onClick: function onClick($event) {
+        return _ctx.$emit('setReply', item.id);
+      }
     }, _hoisted_8, 8 /* PROPS */, _hoisted_6)]), item.file && item.file_format != 'txt' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       href: item.file,
@@ -18294,7 +18397,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "comments__text ql-editor",
       innerHTML: item.comment
     }, null, 8 /* PROPS */, _hoisted_14), item.childs ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_comment_datails, {
-      items: item.childs
+      items: item.childs,
+      onSetReply: _cache[0] || (_cache[0] = function (e) {
+        return _ctx.$emit('setReply', e);
+      })
     }, null, 8 /* PROPS */, ["items"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
   }), 128 /* KEYED_FRAGMENT */);
 }
@@ -18460,32 +18566,93 @@ var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   id: "replyModalLabel"
 }, "Reply"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "button",
-  "class": "btn-close",
+  "class": "btn-close close-modal-reply-comment",
   "data-bs-dismiss": "modal",
   "aria-label": "Close"
 })], -1 /* HOISTED */);
 var _hoisted_36 = {
   "class": "modal-body"
 };
-var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"mb-3\"><label for=\"name-reply\" class=\"form-label\">Name: <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"name-reply\" placeholder=\"Your name...\" required><!-- &lt;div class=&quot;text-danger&quot; v-if=&quot;create_comment_form.name.is_invalid&quot;&gt;\r\n                                {{ create_comment_form.name.invalid_text }}\r\n                            &lt;/div&gt; --></div><div class=\"mb-3\"><label for=\"email-reply\" class=\"form-label\">Email: <span class=\"text-danger\">*</span></label><input type=\"email\" class=\"form-control\" id=\"email-reply\" placeholder=\"example@gmail.com\" required><!-- &lt;div class=&quot;text-danger&quot; v-if=&quot;create_comment_form.email.is_invalid&quot;&gt;\r\n                                {{ create_comment_form.email.invalid_text }}\r\n                            &lt;/div&gt; --></div><div class=\"mb-3\"><label for=\"url\" class=\"form-label\">Home page:</label><input type=\"url\" class=\"form-control\" id=\"url\" placeholder=\"https://example.com\"><!-- &lt;div class=&quot;text-danger&quot; v-if=&quot;create_comment_form.url.is_invalid&quot;&gt;\r\n                                {{ create_comment_form.url.invalid_text }}\r\n                            &lt;/div&gt; --></div><div class=\"mb-3\"><label for=\"file-reply\" class=\"form-label\">File (img or txt):</label><input type=\"file\" class=\"form-control\" id=\"file-reply\" accept=\".png, .jpg, .gif, .txt\" aria-label=\"file example\"><!-- &lt;div class=&quot;text-danger&quot; v-if=&quot;create_comment_form.file.is_invalid&quot;&gt;\r\n                                {{ create_comment_form.file.invalid_text }}\r\n                            &lt;/div&gt; --></div>", 4);
+var _hoisted_37 = {
+  "class": "form-reply-comment"
+};
+var _hoisted_38 = {
+  "class": "mb-3"
+};
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "name",
+  "class": "form-label"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Name: "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1 /* HOISTED */);
+var _hoisted_40 = {
+  key: 0,
+  "class": "text-danger"
+};
 var _hoisted_41 = {
   "class": "mb-3"
 };
 var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "email",
+  "class": "form-label"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Email: "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1 /* HOISTED */);
+var _hoisted_43 = {
+  key: 0,
+  "class": "text-danger"
+};
+var _hoisted_44 = {
+  "class": "mb-3"
+};
+var _hoisted_45 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "url",
+  "class": "form-label"
+}, "Home page:", -1 /* HOISTED */);
+var _hoisted_46 = {
+  key: 0,
+  "class": "text-danger"
+};
+var _hoisted_47 = {
+  "class": "mb-3"
+};
+var _hoisted_48 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "file",
+  "class": "form-label"
+}, "File (img or txt):", -1 /* HOISTED */);
+var _hoisted_49 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "file",
+  "class": "form-control input-file-comment-reply",
+  id: "file",
+  accept: ".png, .jpg, .gif, .txt",
+  "aria-label": "file example"
+}, null, -1 /* HOISTED */);
+var _hoisted_50 = {
+  key: 0,
+  "class": "text-danger"
+};
+var _hoisted_51 = {
+  "class": "mb-3"
+};
+var _hoisted_52 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "form-label"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Comment: "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   "class": "text-danger"
 }, "*")], -1 /* HOISTED */);
-var _hoisted_43 = {
+var _hoisted_53 = {
+  key: 0,
+  "class": "text-danger"
+};
+var _hoisted_54 = {
   "class": "mb-3"
 };
-var _hoisted_44 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_55 = {
+  key: 0,
+  "class": "text-danger"
+};
+var _hoisted_56 = {
   "class": "modal-footer"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "btn btn-primary",
-  type: "button"
-}, "Reply")], -1 /* HOISTED */);
-
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_comment_datails = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("comment-datails");
   var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("pagination");
@@ -18510,8 +18677,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.setSort('email');
     })
   }, "Email " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.sort_type.field == 'email' ? $data.sort_type.type_text : ''), 3 /* TEXT, CLASS */)]), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_comment_datails, {
-    items: $data.comments
-  }, null, 8 /* PROPS */, ["items"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
+    items: $data.comments,
+    onSetReply: $options.setReply
+  }, null, 8 /* PROPS */, ["items", "onSetReply"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
     paginates: $data.paginates,
     onSelectPage: $options.selectPage
   }, null, 8 /* PROPS */, ["paginates", "onSelectPage"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Модалка створення коментаря "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -18552,12 +18720,45 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[6] || (_cache[6] = function () {
       return $options.create && $options.create.apply($options, arguments);
     })
-  }, "Create")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Модалка створення відповіді на коментар "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [_hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", null, [_hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_QuillEditor, {
+  }, "Create")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Модалка створення відповіді на коментар "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [_hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "class": "form-control",
+    id: "name",
+    placeholder: "Your name...",
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+      return $data.reply_comment_form.name.content = $event;
+    }),
+    required: ""
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.reply_comment_form.name.content]]), $data.reply_comment_form.name.is_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.reply_comment_form.name.invalid_text), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "email",
+    "class": "form-control",
+    id: "email",
+    placeholder: "example@gmail.com",
+    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+      return $data.reply_comment_form.email.content = $event;
+    }),
+    required: ""
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.reply_comment_form.email.content]]), $data.reply_comment_form.email.is_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.reply_comment_form.email.invalid_text), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [_hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "url",
+    "class": "form-control",
+    id: "url",
+    placeholder: "https://example.com",
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
+      return $data.reply_comment_form.url.content = $event;
+    })
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.reply_comment_form.url.content]]), $data.reply_comment_form.url.is_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.reply_comment_form.url.invalid_text), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [_hoisted_48, _hoisted_49, $data.reply_comment_form.file.is_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.reply_comment_form.file.invalid_text), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_51, [_hoisted_52, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_QuillEditor, {
+    ref: "replyCommentText",
     options: $data.options
-  }, null, 8 /* PROPS */, ["options"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-danger\" v-if=\"create_comment_form.comment.is_invalid\">\r\n                                {{ create_comment_form.comment.invalid_text }}\r\n                            </div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_recaptcha, {
-    ref: "recaptcha",
+  }, null, 8 /* PROPS */, ["options"]), $data.reply_comment_form.comment.is_invalid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_53, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.reply_comment_form.comment.invalid_text), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_recaptcha, {
+    ref: "recaptcha2",
     sitekey: "6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v"
-  }, null, 512 /* NEED_PATCH */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-danger\" v-if=\"!is_valid_captha\">\r\n                                No valid captha\r\n                            </div> ")])])]), _hoisted_44])])])], 64 /* STABLE_FRAGMENT */);
+  }, null, 512 /* NEED_PATCH */), !$data.is_valid_captha_2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_55, " No valid captha ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-primary",
+    type: "button",
+    onClick: _cache[10] || (_cache[10] = function () {
+      return $options.createReply && $options.createReply.apply($options, arguments);
+    })
+  }, "Reply")])])])])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),
@@ -20809,7 +21010,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.comments__txt {\r\n    width: 250px;\r\n    padding: 15px;\n}\n.comments__txt img {\r\n    -o-object-fit: contain;\r\n       object-fit: contain;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.comments__txt {\r\n    width: 250px;\r\n    padding: 15px;\n}\n.comments__txt img {\r\n    -o-object-fit: contain;\r\n       object-fit: contain;\n}\n.header-right {\r\n    border: none;\r\n    background: none;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

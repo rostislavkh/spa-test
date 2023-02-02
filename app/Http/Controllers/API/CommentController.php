@@ -27,6 +27,7 @@ class CommentController extends Controller
         }
 
         Comment::create([
+            'parrent_id' => $request->parrent_id,
             'name' => $request->name,
             'email' => $request->email,
             'url' => $request->url,

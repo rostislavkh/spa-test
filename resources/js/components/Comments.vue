@@ -11,7 +11,7 @@
     </div>
     <hr />
     <div class="comments">
-        <comment-datails :items="comments"></comment-datails>
+        <comment-datails :items="comments" @setReply="setReply"></comment-datails>
     </div>
     <pagination :paginates="paginates" @selectPage="selectPage">
     </pagination>
@@ -85,57 +85,60 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="replyModalLabel">Reply</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close-modal-reply-comment" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- is-invalid - якщо не пройдена валідація. is-valid - якщо пройдена -->
-                    <form>
+                    <form class="form-reply-comment">
                         <div class="mb-3">
-                            <label for="name-reply" class="form-label">Name: <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name-reply" placeholder="Your name..." required>
-                            <!-- <div class="text-danger" v-if="create_comment_form.name.is_invalid">
-                                {{ create_comment_form.name.invalid_text }}
-                            </div> -->
+                            <label for="name" class="form-label">Name: <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" placeholder="Your name..."
+                                v-model="reply_comment_form.name.content" required>
+                            <div class="text-danger" v-if="reply_comment_form.name.is_invalid">
+                                {{ reply_comment_form.name.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="email-reply" class="form-label">Email: <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email-reply" placeholder="example@gmail.com" required>
-                            <!-- <div class="text-danger" v-if="create_comment_form.email.is_invalid">
-                                {{ create_comment_form.email.invalid_text }}
-                            </div> -->
+                            <label for="email" class="form-label">Email: <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="example@gmail.com"
+                                v-model="reply_comment_form.email.content" required>
+                            <div class="text-danger" v-if="reply_comment_form.email.is_invalid">
+                                {{ reply_comment_form.email.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="url" class="form-label">Home page:</label>
-                            <input type="url" class="form-control" id="url" placeholder="https://example.com">
-                            <!-- <div class="text-danger" v-if="create_comment_form.url.is_invalid">
-                                {{ create_comment_form.url.invalid_text }}
-                            </div> -->
+                            <input type="url" class="form-control" id="url" placeholder="https://example.com"
+                                v-model="reply_comment_form.url.content">
+                            <div class="text-danger" v-if="reply_comment_form.url.is_invalid">
+                                {{ reply_comment_form.url.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="file-reply" class="form-label">File (img or txt):</label>
-                            <input type="file" class="form-control" id="file-reply" accept=".png, .jpg, .gif, .txt"
+                            <label for="file" class="form-label">File (img or txt):</label>
+                            <input type="file" class="form-control input-file-comment-reply" id="file" accept=".png, .jpg, .gif, .txt"
                                 aria-label="file example">
-                            <!-- <div class="text-danger" v-if="create_comment_form.file.is_invalid">
-                                {{ create_comment_form.file.invalid_text }}
-                            </div> -->
+                            <div class="text-danger" v-if="reply_comment_form.file.is_invalid">
+                                {{ reply_comment_form.file.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Comment: <span class="text-danger">*</span></label>
-                            <QuillEditor :options="options" />
-                            <!-- <div class="text-danger" v-if="create_comment_form.comment.is_invalid">
-                                {{ create_comment_form.comment.invalid_text }}
-                            </div> -->
+                            <QuillEditor ref="replyCommentText" :options="options" />
+                            <div class="text-danger" v-if="reply_comment_form.comment.is_invalid">
+                                {{ reply_comment_form.comment.invalid_text }}
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <vue-recaptcha ref="recaptcha" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
-                            <!-- <div class="text-danger" v-if="!is_valid_captha">
+                            <vue-recaptcha ref="recaptcha2" sitekey="6LdOizkkAAAAAA7aE8M7whpI3eQbTXXCKxSxPG6v" />
+                            <div class="text-danger" v-if="!is_valid_captha_2">
                                 No valid captha
-                            </div> -->
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="button">Reply</button>
+                    <button class="btn btn-primary" type="button" @click="createReply">Reply</button>
                 </div>
             </div>
         </div>
@@ -157,6 +160,8 @@ export default {
                 type_emoji: '👇',
                 type_text: '(Z-A)'
             },
+
+            reply_id: 0,
 
             comments: {},
 
@@ -203,6 +208,34 @@ export default {
                 },
             },
 
+            reply_comment_form: {
+                name: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                email: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                url: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                file: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+                comment: {
+                    content: '',
+                    is_invalid: false,
+                    invalid_text: null
+                },
+            },
+
             paginates: {
                 is_view_paginate: false,
                 curr_page: 0,
@@ -212,10 +245,15 @@ export default {
                 is_last: false,
             },
 
-            is_valid_captha: true
+            is_valid_captha: true,
+            is_valid_captha_2: true
         }
     },
     methods: {
+        setReply(e) {
+            this.reply_id = e;
+            console.log(e);
+        },
         selectPage(e) {
             this.paginates.curr_page = e;
             this.getComments();
@@ -251,10 +289,22 @@ export default {
                 this.create_comment_form[key].is_invalid = false;
                 this.create_comment_form[key].invalid_text = null;
             }
+
+            this.is_valid_captha_2 = true;
+            
+            for (let key in this.reply_comment_form) {
+                this.reply_comment_form[key].is_invalid = false;
+                this.reply_comment_form[key].invalid_text = null;
+            }
         },
         cleanCreateForm() {
             for (let key in this.create_comment_form) {
                 this.create_comment_form[key].content = '';
+            }
+        },
+        cleanReplyForm() {
+            for (let key in this.reply_comment_form) {
+                this.reply_comment_form[key].content = '';
             }
         },
         async create() {
@@ -268,6 +318,7 @@ export default {
             if (file.files[0]) {
                 data.append('file', file.files[0]);
             }
+            data.append('parrent_id', null);
             data.append('name', this.create_comment_form.name.content);
             data.append('email', this.create_comment_form.email.content);
             data.append('url', this.create_comment_form.url.content);
@@ -289,11 +340,58 @@ export default {
             } else {
                 this.cleanErrors();
                 this.cleanCreateForm();
+                this.$refs.createCommentText.setText('');
             }
 
             this.$refs.recaptcha1.reset();
 
             document.querySelector('.close-modal-create-comment').click();
+
+            this.getComments();
+        },
+        async createReply() {
+            this.cleanErrors();
+
+            let errors = null;
+
+            const data = new FormData(document.querySelector('.form-reply-comment'));
+            let file = document.querySelector('.input-file-comment-reply');
+
+            if (file.files[0]) {
+                data.append('file', file.files[0]);
+            }
+            data.append('parrent_id', this.reply_id);
+            data.append('name', this.reply_comment_form.name.content);
+            data.append('email', this.reply_comment_form.email.content);
+            data.append('url', this.reply_comment_form.url.content);
+            if (this.$refs.replyCommentText.getText() != '\n') {
+                data.append('comment', this.$refs.replyCommentText.getHTML());
+            }
+
+            await axios.post('api/make-comment', data).catch(error => (errors = error.response.data.errors));
+
+            if (errors) {
+                for (let key in errors) {
+                    if (key == 'g-recaptcha-response') {
+                        this.is_valid_captha = false;
+                    } else {
+                        if (this.reply_comment_form[key]) {
+                            this.reply_comment_form[key].is_invalid = true;
+                            this.reply_comment_form[key].invalid_text = errors[key][0];
+                        }
+                    }
+                }
+            } else {
+                this.cleanErrors();
+                this.cleanReplyForm();
+                this.$refs.replyCommentText.setText('');
+            }
+
+            this.$refs.recaptcha2.reset();
+
+            document.querySelector('.close-modal-reply-comment').click();
+
+            this.getComments();
         }
     },
     mounted() {
