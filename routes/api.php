@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('make-comment', [CommentController::class, 'makeComment'])->name('make-comment');
+Route::get('get-comments/{sort_type?}', [CommentController::class, 'getComments'])->name('get-comments');

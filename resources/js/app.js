@@ -16,7 +16,10 @@ import { createApp } from 'vue';
 const app = createApp({});
 
 import Comments from './components/Comments.vue';
+import CommentDatails from './components/Comment-datails.vue';
+
 app.component('comments', Comments);
+app.component('comment-datails', CommentDatails);
 
 /**
  * The following block of code may be used to automatically register your
