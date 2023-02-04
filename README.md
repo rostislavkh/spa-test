@@ -5,9 +5,10 @@
 1) Налаштувати корневий каталог на сервері, щоб він був <code>/public</code>
 2) Створити файл з налаштуваннями <code>cp .env.example .env</code> (налаштувати конфігурацію)
 3) <code>composer install</code>
-4) <code>php artisan migrate</code>
-5) <code>npm install</code>
-6) <code>php artisan storage:link</code> (якщо не завантажуються фотографії, або не відображаються, то перверірте також доступи до папки <code>/public</code>)
+4) <code>php artisan key:generate</code>
+5) <code>php artisan migrate</code>
+6) <code>npm install</code>
+7) <code>php artisan storage:link</code> (якщо не завантажуються фотографії, або не відображаються, то перверірте також доступи до папки <code>/public</code>)
 
 ## Конфигурація
 
