@@ -7,6 +7,7 @@
 3) <code>composer install</code>
 4) <code>php artisan migrate</code>
 5) <code>npm install</code>
+6) <code>php artisan storage:link</code> (якщо не завантажуються фотографії, або не відображаються, то перверірте також доступи до папки <code>/public</code>)
 
 ## Конфигурація
 
