@@ -8,9 +8,7 @@
 4) <code>php artisan migrate</code>
 5) <code>npm install</code>
 
-##
-
-### Конфигурація
+## Конфигурація
 
 Версія php: <code>8.1.6</code><br>
 Версія NodeJS: <code>v19.3.0</code><br>
